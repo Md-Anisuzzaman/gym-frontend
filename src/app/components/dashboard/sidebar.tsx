@@ -67,7 +67,7 @@ export function Sidebar({ open, className }: SidebarProps) {
     if (activeParent && !openItems.includes(activeParent.title)) {
       setOpenItems(prev => [...prev, activeParent.title])
     }
-  }, [pathname])
+  }, [])
 
   const toggleItem = (title: string) => {
     setOpenItems(prev =>

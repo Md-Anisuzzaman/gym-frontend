@@ -508,7 +508,7 @@ export default function MemberAdmissionForm() {
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input type="number" placeholder="25" {...field} onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input type="number" placeholder='22' value={field.value || ""}  onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />

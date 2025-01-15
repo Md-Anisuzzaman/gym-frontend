@@ -15,7 +15,6 @@ export default function RootLayout({
 }) {
   const pathname = usePathname();
   const isDashboardPage = pathname.startsWith("/dashboard");
-  console.log(pathname);
   
 
   return (
