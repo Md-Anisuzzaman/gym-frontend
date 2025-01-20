@@ -5,8 +5,6 @@ import { Navbar } from "./components/navbar";
 import { Footer } from "./components/footer";
 import { usePathname } from "next/navigation";
 import "./globals.css";
-import { useState } from "react";
-
 
 
 import ReduxWrapper from "@/provider/redux/ReduxWrapper";

@@ -44,3 +44,19 @@ export interface Member {
         [field: string]: string[]; // Index signature for dynamic field names
     };
 }
+
+ type ApiError = {
+  data?: {
+    errors?: Record<string, string>; // Key-value pairs for validation errors
+  };
+  message?: string; // Optional general error message
+};
+
+export function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "data" in error &&
+    typeof (error as ApiError).data === "object"
+  );
+}

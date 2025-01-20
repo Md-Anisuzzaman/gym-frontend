@@ -404,6 +404,8 @@ import {
 } from "lucide-react";
 import { useAddMemberMutation } from "@/provider/redux/query/member";
 import { useRouter } from "next/navigation";
+import { isApiError } from "@/types/dataTypes";
+
 
 const membershipTypes = [
   { value: "Regular", label: "Regular" },
@@ -517,6 +519,39 @@ export default function MemberAdmissionForm() {
   //   }
   // }
 
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsSubmitting(true);
+  //   try {
+  //     const result = await addMember(values).unwrap();
+  //     toast({
+  //       title: "Member admitted successfully",
+  //       description: "The new member has been added to the system.",
+  //       variant: "success",
+  //     });
+  //     form.reset();
+  //     // router.push("/dashboard/members/details");
+  //   } catch (error: any) {
+  //     // Check for API validation errors
+  //     if (error?.data?.errors) {
+  //       Object.entries(error.data.errors).forEach(([key, value]) => {
+  //         form.setError(key as keyof typeof formSchema.shape, {
+  //           type: "server",
+  //           message: value as string,
+  //         });
+  //       });
+  //     } else {
+  //       // General error toast
+  //       toast({
+  //         title: "Error",
+  //         description: "There was a problem admitting the member.",
+  //         variant: "destructive",
+  //       });
+  //     }
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
@@ -526,22 +561,30 @@ export default function MemberAdmissionForm() {
         description: "The new member has been added to the system.",
         variant: "success",
       });
-      form.reset();
-      // router.push("/dashboard/members/details");
-    } catch (error: any) {
-      // Check for API validation errors
-      if (error?.data?.errors) {
-        Object.entries(error.data.errors).forEach(([key, value]) => {
-          form.setError(key as keyof typeof formSchema.shape, {
-            type: "server",
-            message: value as string,
+      // form.reset();
+      // console.log("Error:");
+    } catch (error: unknown) {
+      // Narrow the error to ApiError
+      
+      if (isApiError(error)) {
+        if (error.data?.errors) {
+          Object.entries(error.data.errors).forEach(([key, value]) => {
+            form.setError(key as keyof typeof formSchema.shape, {
+              type: "server",
+              message: value,
+            });
           });
-        });
+        } else {
+          toast({
+            title: "Error",
+            description: error.message || "There was a problem admitting the member.",
+            variant: "destructive",
+          });
+        }
       } else {
-        // General error toast
         toast({
           title: "Error",
-          description: "There was a problem admitting the member.",
+          description: "An unexpected error occurred.",
           variant: "destructive",
         });
       }
@@ -549,6 +592,7 @@ export default function MemberAdmissionForm() {
       setIsSubmitting(false);
     }
   }
+  
 
   // const isButtonDisabled =
   //   !["Admin", "Employee"].includes(userRole) || isSubmitting;
