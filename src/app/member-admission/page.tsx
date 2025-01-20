@@ -469,9 +469,8 @@ const formSchema = z.object({
 
 export default function MemberAdmissionForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userRole, setUserRole] = useState("member"); // This should be fetched from your authentication system
+  // const [userRole, setUserRole] = useState("member"); // This should be fetched from your authentication system
   const [addMember] = useAddMemberMutation();
-  const router = useRouter();
 
   const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({

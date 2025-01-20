@@ -5,7 +5,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const memberApi = createApi({
   reducerPath: "MemberApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: process.env.API_BASE_URL,
+    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   }),
   endpoints: (builder) => ({
     // Fetch all members
