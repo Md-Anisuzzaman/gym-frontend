@@ -1,4 +1,4 @@
-import { MemberActivityResponse, MembersResponse } from "@/types/dataTypes";
+import { MemberActivityResponse} from "@/types/dataTypes";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 // console.log("dotenv", process.env.NEXT_PUBLIC_API_BASE_URL);
 
@@ -6,7 +6,7 @@ export const memberActApi = createApi({
   reducerPath: "MemberActApi",
   baseQuery: async (args, api, extraOptions) => {
     const result = await fetchBaseQuery({
-      baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+      baseUrl: process.env.API_BASE_URL,
     })(args, api, extraOptions);
     return result;
   },
