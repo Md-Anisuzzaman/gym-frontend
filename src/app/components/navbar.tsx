@@ -1,3 +1,5 @@
+//first design
+
 // "use client"
 
 // import React, { useState } from 'react'
@@ -154,9 +156,6 @@
 //   )
 // }
 
-
-
-
 // "use client"
 
 // import { useState } from 'react'
@@ -246,6 +245,7 @@
 //     )
 // }
 
+// my pick navbar
 "use client"
 
 import React, { useState, useEffect } from 'react'
@@ -438,3 +438,219 @@ export function Navbar({ isSticky = true }: { isSticky?: boolean }) {
   )
 }
 
+
+//third desgin
+
+// "use client";
+
+// import React, { useState } from "react";
+// import Link from "next/link";
+// import { useTheme } from "next-themes";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Moon,
+//   Sun,
+//   ChevronDown,
+//   Menu,
+//   X,
+//   Home,
+//   Info,
+//   Dumbbell,
+//   Phone,
+//   UserPlus,
+//   Users,
+//   UserCheck,
+//   LayoutDashboard,
+// } from "lucide-react";
+// import {
+//   DropdownMenu,
+//   DropdownMenuContent,
+//   DropdownMenuItem,
+//   DropdownMenuTrigger,
+// } from "@/components/ui/dropdown-menu";
+// import { cn } from "@/lib/utils";
+
+// interface NavItem {
+//   href: string;
+//   label: string;
+//   icon: React.ElementType;
+// }
+
+// interface NavItemWithDropdown {
+//   label: string;
+//   icon: React.ElementType;
+//   items: NavItem[];
+// }
+
+// type NavItemType = NavItem | NavItemWithDropdown;
+
+// const navItems: NavItemType[] = [
+//   { href: "/", label: "Home", icon: Home },
+//   { href: "#about", label: "About", icon: Info },
+//   {
+//     label: "Fitness",
+//     icon: Dumbbell,
+//     items: [
+//       { href: "#transformations", label: "Transformations", icon: Users },
+//       { href: "#blog", label: "Blog", icon: Dumbbell },
+//     ],
+//   },
+//   { href: "#contact", label: "Contact", icon: Phone },
+//   {
+//     label: "Account",
+//     icon: UserPlus,
+//     items: [
+//       { href: "/login", label: "Login", icon: UserCheck },
+//       { href: "/register", label: "Register", icon: UserPlus },
+//       {
+//         href: "/account/member-admission",
+//         label: "Member Admission",
+//         icon: UserPlus,
+//       },
+//       {
+//         href: "/account/employee-attendance",
+//         label: "Employee Attendance",
+//         icon: Users,
+//       },
+//     ],
+//   },
+//   { href: "/member-tracking", label: "Member Tracking", icon: Users },
+//   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+// ];
+
+// export function Navbar({ isSticky = true }: { isSticky?: boolean }) {
+//   const { theme, setTheme } = useTheme();
+//   const [isOpen, setIsOpen] = useState(false);
+
+//   const toggleNavbar = () => setIsOpen(!isOpen);
+
+//   const isNavItemWithDropdown = (
+//     item: NavItemType
+//   ): item is NavItemWithDropdown => {
+//     return "items" in item;
+//   };
+
+//   return (
+//     <>
+//       <Button
+//           variant="ghost"
+//           size="icon"
+//           className="sticky top-10 z-50 border-2"
+//           onClick={toggleNavbar}
+//         >
+//           {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+//         </Button>
+//       <Button
+//         variant="ghost"
+//         size="icon"
+//         className="sticky top-10 z-50"
+//         onClick={toggleNavbar}
+//       >
+//         {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+//       </Button>
+//       <nav
+//         className={cn(
+//           "fixed top-20 left-0 bg-background border-r transition-all duration-300 z-40 shadow-lg",
+//           isOpen ? "w-64" : "w-16"
+//         )}
+//       >
+//         {/* <Button
+//           variant="ghost"
+//           size="icon"
+//           className="absolute top-4 right-4 z-50"
+//           onClick={toggleNavbar}
+//         >
+//           {isOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+//         </Button> */}
+//         <div className="flex flex-col items-center h-full py-8">
+//           <Link href="/" className="flex items-center justify-center mb-8">
+//             <span
+//               className={cn(
+//                 "text-2xl font-bold text-primary",
+//                 !isOpen && "hidden"
+//               )}
+//             >
+//               Power Gym
+//             </span>
+//             <Dumbbell
+//               className={cn("h-8 w-8 text-primary", isOpen && "hidden")}
+//             />
+//           </Link>
+//           <ul className="flex-1 px-2 space-y-2">
+//             {navItems.map((item, index) => (
+//               <li key={index} className="relative group">
+//                 {isNavItemWithDropdown(item) ? (
+//                   <DropdownMenu>
+//                     <DropdownMenuTrigger asChild>
+//                       <Button variant="ghost" className="w-full justify-start">
+//                         <item.icon className="h-5 w-5" />
+//                         <span
+//                           className={cn(
+//                             "ml-2 flex-1 text-left",
+//                             !isOpen && "hidden"
+//                           )}
+//                         >
+//                           {item.label}
+//                         </span>
+//                         <ChevronDown
+//                           className={cn("h-4 w-4 ml-auto", !isOpen && "hidden")}
+//                         />
+//                       </Button>
+//                     </DropdownMenuTrigger>
+//                     <DropdownMenuContent className="w-56">
+//                       {item.items.map((subItem, subIndex) => (
+//                         <DropdownMenuItem key={subIndex} asChild>
+//                           <Link href={subItem.href} className="w-full">
+//                             <subItem.icon className="h-4 w-4 mr-2" />
+//                             {subItem.label}
+//                           </Link>
+//                         </DropdownMenuItem>
+//                       ))}
+//                     </DropdownMenuContent>
+//                   </DropdownMenu>
+//                 ) : (
+//                   <Link href={item.href} passHref>
+//                     <Button variant="ghost" className="w-full justify-start">
+//                       <item.icon className="h-5 w-5" />
+//                       <span className={cn("ml-2 flex-1", !isOpen && "hidden")}>
+//                         {item.label}
+//                       </span>
+//                     </Button>
+//                   </Link>
+//                 )}
+//                 {!isOpen && (
+//                   <div className="absolute left-full top-0 ml-2 hidden group-hover:block">
+//                     <div className="bg-background px-2 py-1 rounded-md shadow-md">
+//                       {item.label}
+//                     </div>
+//                   </div>
+//                 )}
+//               </li>
+//             ))}
+//           </ul>
+//           <div className="px-2">
+//             <Button
+//               variant="ghost"
+//               size="icon"
+//               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+//               className="w-full justify-start relative group"
+//             >
+//               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+//               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+//               {!isOpen && (
+//                 <div className="absolute left-full top-0 ml-2 hidden group-hover:block">
+//                   <div className="bg-background px-2 py-1 rounded-md shadow-md">
+//                     Toggle theme
+//                   </div>
+//                 </div>
+//               )}
+//               <span className={cn("ml-2", !isOpen && "hidden")}>
+//                 Toggle theme
+//               </span>
+//             </Button>
+//           </div>
+//         </div>
+//       </nav>
+//     </>
+//   );
+// }

@@ -158,27 +158,29 @@ const sidebarNavItems = [
     icon: Home,
   },
   {
-    title: "User Management",
-    href: "/dashboard/users",
+    title: "Members Management",
+    href: "/dashboard/members",
     icon: Users,
     subItems: [
-      { title: "Create User", href: "/dashboard/users/create" },
-      { title: "Edit User", href: "/dashboard/users/edit" },
-      { title: "Update User", href: "/dashboard/users/update" },
+      { title: "Members Details", href: "/dashboard/members/details" },
+      { title: "Create Member", href: "/dashboard/members/create" },
+      { title: "Edit Member", href: "/dashboard/members/edit" },
+      { title: "Update Member", href: "/dashboard/members/update" },
     ]
   },
   {
-    title: "User Activity",
+    title: "Members Activity",
     href: "/dashboard/activity",
     icon: SquareActivity,
     subItems: [
+      { title: "Activity Details", href: "/dashboard/activity/details" },
       { title: "Create Activity", href: "/dashboard/activity/create" },
-      { title: "Edit Activity", href: "/dashboard/activity/edit" },
+      // { title: "Edit Activity", href: "/dashboard/activity/edit" },
       { title: "Update Activity", href: "/dashboard/activity/update" },
     ]
   },
   {
-    title: "Employee Management",
+    title: "Employees Management",
     href: "/dashboard/employees",
     icon: UserCog,
     subItems: [

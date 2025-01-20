@@ -12,10 +12,12 @@
 //   )
 // }
 
+"use client";
 import Image from "next/image";
 // import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
       <Image
@@ -23,11 +25,12 @@ export function HeroSection() {
         alt="Gym banner"
         // layout="fill"
         fill
+        priority
         // objectFit="cover"
         style={{ objectFit: "cover" }}
         quality={100}
       />
-      
+
       <div className="absolute inset-6 bg-black bg-opacity-50" />
       {/* <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4">
         <h1 className="text-4xl md:text-6xl font-bold mb-4 leading-tight">

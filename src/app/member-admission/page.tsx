@@ -25,7 +25,6 @@
 // } from "@/components/ui/select"
 // import { useToast } from "@/hooks/use-toast"
 
-
 // import { User, Briefcase, MapPin, Mail, Phone, UserCircle, Scale, Ruler, Calendar } from 'lucide-react'
 
 // const membershipTypes = [
@@ -76,7 +75,7 @@
 //     defaultValues: {
 //       full_name: "",
 //       profession: "",
-//       present_address: "", 
+//       present_address: "",
 //       permanent_address: "",
 //       email: "",
 //       password: "",
@@ -110,8 +109,6 @@
 //   }
 
 //   const isButtonDisabled = !['Admin', 'Employee'].includes(userRole) || isSubmitting
-
-  
 
 //   return (
 //     <div className="container mx-auto py-10 px-4 max-w-2xl">
@@ -350,8 +347,8 @@
 //               </FormItem>
 //             )}
 //           />
-//           <Button 
-//             type="submit" 
+//           <Button
+//             type="submit"
 //             disabled={isButtonDisabled}
 //             className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-4 rounded-lg shadow-md transition-colors duration-200"
 //           >
@@ -363,16 +360,15 @@
 //   )
 // }
 
+"use client";
 
-"use client"
-
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -381,60 +377,103 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
+} from "@/components/ui/form";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { User, Briefcase, MapPin, Mail, Phone, UserCircle, Scale, Ruler, Calendar, Dumbbell } from 'lucide-react'
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster"
+
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  User,
+  Briefcase,
+  MapPin,
+  Mail,
+  Phone,
+  UserCircle,
+  Scale,
+  Ruler,
+  Calendar,
+  Dumbbell,
+} from "lucide-react";
+import { useAddMemberMutation } from "@/provider/redux/query/member";
+import { useRouter } from "next/navigation";
 
 const membershipTypes = [
-  { value: 'Regular', label: 'Regular' },
-  { value: 'Monthly', label: 'Monthly' },
-  { value: 'Yearly', label: 'Yearly' },
-]
+  { value: "Regular", label: "Regular" },
+  { value: "Monthly", label: "Monthly" },
+  { value: "Yearly", label: "Yearly" },
+];
 
 const bodyTypes = [
-  { value: 'Slim', label: 'Slim' },
-  { value: 'Medium', label: 'Medium' },
-  { value: 'Large', label: 'Large' },
-]
+  { value: "Slim", label: "Slim" },
+  { value: "Medium", label: "Medium" },
+  { value: "Large", label: "Large" },
+];
 
 const workoutPlanTypes = [
-  { value: 'Cardio', label: 'Cardio' },
-  { value: 'Day_1', label: 'Day 1' },
-  { value: 'Day_2', label: 'Day 2' },
-  { value: 'Day_3', label: 'Day 3' },
-  { value: 'Day_1_plus_Cardio', label: 'Day 1 + Cardio' },
-  { value: 'Day_2_plus_Cardio', label: 'Day 2 + Cardio' },
-  { value: 'Day_3_plus_Cardio', label: 'Day 3 + Cardio' },
-]
+  { value: "Cardio", label: "Cardio" },
+  { value: "Day_1", label: "Day 1" },
+  { value: "Day_2", label: "Day 2" },
+  { value: "Day_3", label: "Day 3" },
+  { value: "Day_1_plus_Cardio", label: "Day 1 + Cardio" },
+  { value: "Day_2_plus_Cardio", label: "Day 2 + Cardio" },
+  { value: "Day_3_plus_Cardio", label: "Day 3 + Cardio" },
+];
 
 const formSchema = z.object({
-  full_name: z.string().min(2, { message: "Full name must be at least 2 characters." }),
-  age: z.number().min(16, { message: "Age must be at least 16." }).optional(),
-  profession: z.string().min(2, { message: "Profession must be at least 2 characters." }),
-  present_address: z.string().min(5, { message: "Present address must be at least 5 characters." }),
-  permanent_address: z.string().min(5, { message: "Permanent address must be at least 5 characters." }),
+  full_name: z
+    .string()
+    .min(2, { message: "Full name must be at least 2 characters." }),
+  age: z.number().min(16, { message: "Age must be at least 16." }),
+  profession: z
+    .string()
+    .min(2, { message: "Profession must be at least 2 characters." }),
+  present_address: z
+    .string()
+    .min(5, { message: "Present address must be at least 5 characters." }),
+  permanent_address: z
+    .string()
+    .min(5, { message: "Permanent address must be at least 5 characters." }),
   email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
-  mobile_number: z.string().min(10, { message: "Mobile number must be at least 10 characters." }),
-  membership_type: z.enum(['Regular', 'Monthly', 'Yearly']),
-  body_type: z.enum(['Slim', 'Medium', 'Large']),
-  weight: z.string().min(2, { message: "Weight must be at least 2 characters." }),
-  height: z.string().min(2, { message: "Height must be at least 2 characters." }),
-  workout_plan_type: z.enum(['Cardio', 'Day_1', 'Day_2', 'Day_3', 'Day_1_plus_Cardio', 'Day_2_plus_Cardio', 'Day_3_plus_Cardio']),
-})
+  password: z
+    .string()
+    .min(8, { message: "Password must be at least 8 characters." }),
+  mobile_number: z
+    .string()
+    .min(10, { message: "Mobile number must be at least 10 characters." }),
+  membership_type: z.enum(["Regular", "Monthly", "Yearly"]),
+  body_type: z.enum(["Slim", "Medium", "Large"]),
+  weight: z
+    .string()
+    .min(2, { message: "Weight must be at least 2 characters." }),
+  height: z
+    .string()
+    .min(2, { message: "Height must be at least 2 characters." }),
+  workout_plan_type: z.enum([
+    "Cardio",
+    "Day_1",
+    "Day_2",
+    "Day_3",
+    "Day_1_plus_Cardio",
+    "Day_2_plus_Cardio",
+    "Day_3_plus_Cardio",
+  ]),
+});
 
 export default function MemberAdmissionForm() {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [userRole, setUserRole] = useState('Admin') // This should be fetched from your authentication system
-  const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userRole, setUserRole] = useState("member"); // This should be fetched from your authentication system
+  const [addMember] = useAddMemberMutation();
+  const router = useRouter();
+
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -451,35 +490,78 @@ export default function MemberAdmissionForm() {
       height: "",
       workout_plan_type: "Cardio",
     },
-  })
+  });
+
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsSubmitting(true);
+  //   try {
+  //     // Here you would typically send the data to your API
+  //     console.log("Data:", values);
+  //     const result = await addMember(values).unwrap();
+  //     console.log("Update successful:", result);
+  //     toast({
+  //       title: "Member admitted successfully",
+  //       description: "The new member has been added to the system.",
+  //     });
+  //     alert("Member created successfully!");
+  //     router.push("/dashboard/members/details");
+
+  //   } catch (error:any) {
+  //     console.log("Error:", error.data.errors);
+  //     toast({
+  //       title: "Error",
+  //       description: "There was a problem admitting the member.",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
-      // Here you would typically send the data to your API
-      console.log(values)
+      const result = await addMember(values).unwrap();
       toast({
         title: "Member admitted successfully",
         description: "The new member has been added to the system.",
-      })
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was a problem admitting the member.",
-        variant: "destructive",
-      })
+        variant: "success",
+      });
+      form.reset();
+      // router.push("/dashboard/members/details");
+    } catch (error: any) {
+      // Check for API validation errors
+      if (error?.data?.errors) {
+        Object.entries(error.data.errors).forEach(([key, value]) => {
+          form.setError(key as keyof typeof formSchema.shape, {
+            type: "server",
+            message: value as string,
+          });
+        });
+      } else {
+        // General error toast
+        toast({
+          title: "Error",
+          description: "There was a problem admitting the member.",
+          variant: "destructive",
+        });
+      }
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
-  const isButtonDisabled = !['Admin', 'Employee'].includes(userRole) || isSubmitting
+  // const isButtonDisabled =
+  //   !["Admin", "Employee"].includes(userRole) || isSubmitting;
+  // console.log("isButtonDisabled",isButtonDisabled);
 
   return (
     <div className="container mx-auto py-10 px-4 max-w-2xl">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold mb-8 text-center">Member Admission Form</CardTitle>
+          <CardTitle className="text-3xl font-bold mb-8 text-center">
+            Member Admission Form
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -489,11 +571,17 @@ export default function MemberAdmissionForm() {
                 name="full_name"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Full Name</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Full Name
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <User className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input placeholder="John Doe" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          placeholder="John Doe"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -505,11 +593,25 @@ export default function MemberAdmissionForm() {
                 name="age"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Age</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Age
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Calendar className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input type="number" placeholder='22' value={field.value || ""}  onChange={e => field.onChange(e.target.value ? parseInt(e.target.value) : undefined)} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          type="number"
+                          placeholder="22"
+                          value={field.value || ""}
+                          onChange={(e) =>
+                            field.onChange(
+                              e.target.value
+                                ? parseInt(e.target.value)
+                                : undefined
+                            )
+                          }
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -521,11 +623,17 @@ export default function MemberAdmissionForm() {
                 name="profession"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Profession</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Profession
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Briefcase className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input placeholder="Software Engineer" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          placeholder="Software Engineer"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -537,11 +645,17 @@ export default function MemberAdmissionForm() {
                 name="present_address"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Present Address</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Present Address
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-start rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <MapPin className="w-4 h-4 mr-2 mt-1 text-muted-foreground" />
-                        <Textarea placeholder="123 Main St, City, Country" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Textarea
+                          placeholder="123 Main St, City, Country"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -553,11 +667,17 @@ export default function MemberAdmissionForm() {
                 name="permanent_address"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Permanent Address</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Permanent Address
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-start rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <MapPin className="w-4 h-4 mr-2 mt-1 text-muted-foreground" />
-                        <Textarea placeholder="456 Oak St, Town, Country" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Textarea
+                          placeholder="456 Oak St, Town, Country"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -569,11 +689,18 @@ export default function MemberAdmissionForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Email</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Email
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Mail className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input type="email" placeholder="john@example.com" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          type="email"
+                          placeholder="john@example.com"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -585,11 +712,18 @@ export default function MemberAdmissionForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Password</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Password
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <UserCircle className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input type="password" placeholder="********" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          type="password"
+                          placeholder="********"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -601,11 +735,17 @@ export default function MemberAdmissionForm() {
                 name="mobile_number"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Mobile Number</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Mobile Number
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Phone className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input placeholder="+1234567890" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          placeholder="+1234567890"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -617,12 +757,20 @@ export default function MemberAdmissionForm() {
                 name="membership_type"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Membership Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel className="block text-sm font-medium">
+                      Membership Type
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="flex items-center justify-start">
                           <UserCircle className="w-4 h-4 mr-2 text-muted-foreground" />
-                          <SelectValue placeholder="Select membership type" className="text-left" />
+                          <SelectValue
+                            placeholder="Select membership type"
+                            className="text-left"
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -642,12 +790,20 @@ export default function MemberAdmissionForm() {
                 name="body_type"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Body Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel className="block text-sm font-medium">
+                      Body Type
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="flex items-center justify-start">
                           <UserCircle className="w-4 h-4 mr-2 text-muted-foreground" />
-                          <SelectValue placeholder="Select body type" className="text-left" />
+                          <SelectValue
+                            placeholder="Select body type"
+                            className="text-left"
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -667,11 +823,17 @@ export default function MemberAdmissionForm() {
                 name="weight"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Weight</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Weight
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Scale className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input placeholder="70 kg" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          placeholder="70 kg"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -683,11 +845,17 @@ export default function MemberAdmissionForm() {
                 name="height"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Height</FormLabel>
+                    <FormLabel className="block text-sm font-medium">
+                      Height
+                    </FormLabel>
                     <FormControl>
                       <div className="flex items-center rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background">
                         <Ruler className="w-4 h-4 mr-2 text-muted-foreground" />
-                        <Input placeholder="175 cm" {...field} className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0" />
+                        <Input
+                          placeholder="175 cm"
+                          {...field}
+                          className="border-0 p-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                       </div>
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -699,12 +867,20 @@ export default function MemberAdmissionForm() {
                 name="workout_plan_type"
                 render={({ field }) => (
                   <FormItem className="space-y-2">
-                    <FormLabel className="block text-sm font-medium">Workout Plan Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormLabel className="block text-sm font-medium">
+                      Workout Plan Type
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="flex items-center justify-start">
                           <Dumbbell className="w-4 h-4 mr-2 text-muted-foreground" />
-                          <SelectValue placeholder="Select workout plan type" className="text-left" />
+                          <SelectValue
+                            placeholder="Select workout plan type"
+                            className="text-left"
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -719,9 +895,9 @@ export default function MemberAdmissionForm() {
                   </FormItem>
                 )}
               />
-              <Button 
-                type="submit" 
-                disabled={isButtonDisabled}
+              <Button
+                type="submit"
+                // disabled={isButtonDisabled}
                 className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-4 rounded-lg shadow-md transition-colors duration-200"
               >
                 {isSubmitting ? "Submitting..." : "Submit Application"}
@@ -731,5 +907,5 @@ export default function MemberAdmissionForm() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
