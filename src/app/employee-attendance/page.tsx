@@ -104,13 +104,13 @@ export default function EmployeeAttendance() {
         toast({
           title: "Exit recorded successfully",
           description: "The employee exit has been logged.",
+          variant: "success",
         })
-      } catch (error) {
-        console.log("Error:", error);
-        
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error:any) {
         toast({
           title: "Error",
-          description: "There was a problem recording the exit.",
+          description: `${error}`,
           variant: "destructive",
         })
       } finally {

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { useRouter } from "next/navigation";
 import { Save, ArrowLeft } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -83,7 +82,7 @@ export default function EditMemberForm() {
   if (isLoading) {
     return <p>Loading...</p>;
   }
-  let errorMessage: String | undefined;
+  let errorMessage: string | undefined;
   if (isError) {
     errorMessage = "An unknown error occurred.";
 
