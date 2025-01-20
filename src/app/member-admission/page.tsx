@@ -372,7 +372,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -386,7 +386,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Toaster } from "@/components/ui/toaster"
+
 
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -403,7 +403,6 @@ import {
   Dumbbell,
 } from "lucide-react";
 import { useAddMemberMutation } from "@/provider/redux/query/member";
-import { useRouter } from "next/navigation";
 import { isApiError } from "@/types/dataTypes";
 
 
@@ -555,12 +554,15 @@ export default function MemberAdmissionForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const result = await addMember(values).unwrap();
-      toast({
-        title: "Member admitted successfully",
-        description: "The new member has been added to the system.",
-        variant: "success",
-      });
+      const addResult = await addMember(values).unwrap();
+
+      if (addResult.data && addResult.msg){
+        toast({
+          title: "Member admitted successfully",
+          description: "The new member has been added to the system.",
+          variant: "success",
+        });
+      } 
       // form.reset();
       // console.log("Error:");
     } catch (error: unknown) {

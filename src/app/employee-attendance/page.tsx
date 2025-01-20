@@ -106,6 +106,8 @@ export default function EmployeeAttendance() {
           description: "The employee exit has been logged.",
         })
       } catch (error) {
+        console.log("Error:", error);
+        
         toast({
           title: "Error",
           description: "There was a problem recording the exit.",
